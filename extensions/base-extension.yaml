@@ -1,0 +1,5 @@
+---
+group-id: "ch.giraffi"
+artifact-id: "base-extension"
+versions:
+  - "1.0.0-SNAPSHOT"
