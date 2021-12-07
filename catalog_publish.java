@@ -6,6 +6,8 @@
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.FileOutputStream;
+import java.io.File;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
@@ -52,7 +54,7 @@ class catalog_publish implements Callable<Integer> {
     URI registryURL;
 
     @Option(names = { "-t",
-            "--token" }, description = "The token to use when authenticating to the admin endpoint", defaultValue = "${REGISTRY_TOKEN}")
+            "--token" }, description = "The token to use when authenticating to the admin endpoint", defaultValue = "test")
     String token;
 
     @Option(names = {"-a", "--all"}, description = "Publish all versions? If false, just the latest is published")
