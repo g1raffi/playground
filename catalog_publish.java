@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.FileOutputStream;
 import java.io.File;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.stream.Collectors;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
@@ -194,7 +197,9 @@ class catalog_publish implements Callable<Integer> {
     }
 
     private byte[] readExtension(String repository, String groupId, String artifactId, String version) throws IOException {
-        URL extensionJarURL = new URL("http://localhost:8081/repository/maven-snapshots/ch/giraffi/giraffi-base-extension/1.0.4-SNAPSHOT/giraffi-base-extension-1.0.4-20211207.133208-5.jar");
+//        URL extensionJarURL = new URL("http://localhost:8081/repository/maven-snapshots/ch/giraffi/giraffi-base-extension/1.0.4-SNAPSHOT/giraffi-base-extension-1.0.4-20211207.133208-5.jar");
+        URL extensionJarURL = new URL(MessageFormat.format("jar:{0}!/META-INF/quarkus-extension.yaml",
+                "http://localhost:8081/repository/maven-snapshots/ch/giraffi/giraffi-base-extension/1.0.4-SNAPSHOT/giraffi-base-extension-1.0.4-20211207.133208-5.jar"));
         try (InputStream is = extensionJarURL.openStream()) {
             return is.readAllBytes();
         }
@@ -208,6 +213,12 @@ class catalog_publish implements Callable<Integer> {
                 post.setHeader("Token", token);
             }
             post.setEntity(new ByteArrayEntity(extension));
+            System.out.println(post.getURI().toString());
+            System.out.println(post.getEntity().toString());
+            System.out.println(
+                    new BufferedReader(new InputStreamReader(post.getEntity().getContent()))
+                            .lines().collect(Collectors.joining(""))
+            );
             try (CloseableHttpResponse response = httpClient.execute(post)) {
                 StatusLine statusLine = response.getStatusLine();
                 if (statusLine.getStatusCode() == HttpURLConnection.HTTP_CONFLICT) {

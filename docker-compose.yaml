@@ -9,7 +9,8 @@ services:
       - QUARKUS_DATASOURCE_JDBC_URL=jdbc:postgresql://database:5432/registrydb
       - QUARKUS_REGISTRY_ID=registry.giraffi.ch
       - QUARKUS_REGISTRY_GROUPID=ch.giraffi.registry
-      - QUARKUS_REGISTRY_MAVEN_REPO_URL=https://registry.giraffi.ch/maven
+      - QUARKUS_REGISTRY_MAVEN_REPO_URL=http://registry.giraffi.ch/maven
+      - QUARKUS_LOG_LEVEL=DEBUG
     ports:
       - "8085:8080"
     depends_on:
@@ -39,7 +40,7 @@ services:
       - IO_QUARKUS_CODE_QUARKUS_PLATFORMS_REGISTRY_ID=registry.giraffi.ch
       - QUARKUS_REGISTRIES=registry.giraffi.ch,registry.quarkus.io
       - QUARKUS_REGISTRY_REGISTRY_GIRAFFI_CH_REPO_URL=http://registry:8080/maven
-      - QUARKUS_REGISTRY_REGISTRY_GIRAFFI_CH_REPO_URL=https://registry.quarkus.io/maven
+      - QUARKUS_REGISTRY_REGISTRY_QUARKUS_IO_REPO_URL=https://registry.quarkus.io/maven
       - BOOTSTRAP_MAVEN_REPOS=indy-static
       - BOOTSTRAP_MAVEN_REPO_INDY_STATIC_URL=http://indy.psi.redhat.com/api/content/maven/group/static
     #command: bash -c 'while [[ "$$(curl --connect-timeout 2 -s -o /dev/null -w ''%{http_code}'' http://registry:8080/client/platforms)" != "200" ]]; do echo ..; sleep 5; done; echo backend is up;'
