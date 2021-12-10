@@ -37,12 +37,11 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - IO_QUARKUS_CODE_QUARKUS_PLATFORMS_REGISTRY_ID=registry.giraffi.ch
       - QUARKUS_REGISTRIES=registry.giraffi.ch,registry.quarkus.io
       - QUARKUS_REGISTRY_REGISTRY_GIRAFFI_CH_REPO_URL=http://registry:8080/maven
       - QUARKUS_REGISTRY_REGISTRY_QUARKUS_IO_REPO_URL=https://registry.quarkus.io/maven
-      - BOOTSTRAP_MAVEN_REPOS=indy-static
-      - BOOTSTRAP_MAVEN_REPO_INDY_STATIC_URL=http://indy.psi.redhat.com/api/content/maven/group/static
+      - BOOTSTRAP_MAVEN_REPOS=nexus-giraffi
+      - BOOTSTRAP_MAVEN_REPO_NEXUS_GIRAFFI_URL=http://localhost:8081/repository/maven-releases
     #command: bash -c 'while [[ "$$(curl --connect-timeout 2 -s -o /dev/null -w ''%{http_code}'' http://registry:8080/client/platforms)" != "200" ]]; do echo ..; sleep 5; done; echo backend is up;'
     depends_on:
       - registry
