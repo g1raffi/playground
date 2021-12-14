@@ -198,9 +198,15 @@ class catalog_publish implements Callable<Integer> {
 
     private byte[] readExtension(String repository, String groupId, String artifactId, String version) throws IOException {
 //        URL extensionJarURL = new URL("http://localhost:8081/repository/maven-snapshots/ch/giraffi/giraffi-base-extension/1.0.4-SNAPSHOT/giraffi-base-extension-1.0.4-20211207.133208-5.jar");
-        URL extensionJarURL = new URL(MessageFormat.format("jar:{0}!/META-INF/quarkus-extension.yaml",
-                "http://localhost:8081/repository/maven-releases/ch/giraffi/giraffi-base-extension/1.0.4/giraffi-base-extension-1.0.4.jar"));
+//        URL extensionJarURL = new URL(MessageFormat.format("jar:{0}!/META-INF/quarkus-extension.yaml",
+//                "http://localhost:8083/repository/maven-releases/ch/giraffi/giraffi-base-extension/1.0.4/giraffi-base-extension-1.0.4.jar"));
+        URL extensionJarURL = new URL(MessageFormat.format("jar:{0}{1}/{2}/{3}/{2}-{3}.jar!/META-INF/quarkus-extension.yaml",
+                "http://localhost:8083/repository/maven-releases/",
+                groupId.replace('.', '/'),
+                artifactId,
+                version));
         try (InputStream is = extensionJarURL.openStream()) {
+            log.info(is);
             return is.readAllBytes();
         }
     }
