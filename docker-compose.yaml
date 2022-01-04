@@ -46,7 +46,7 @@ services:
       - registry
 
   code-quarkus-frontend:
-    image: quay.io/redhat-developer/code-quarkus
+    image: quay.io/quarkus/code-quarkus-frontend
     ports:
       - "3000:8082"
     depends_on:
@@ -55,7 +55,7 @@ services:
   fake-registry:
     image: nginx:latest
     volumes:
-      - "../docker/nginx/config:/etc/nginx/conf.d"
-      - "../docker/nginx/files:/files"
+      - "./docker/nginx/config:/etc/nginx/conf.d"
+      - "./docker/nginx/files:/files"
     ports:
       - "8083:80"
