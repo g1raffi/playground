@@ -1,0 +1,29 @@
+server {
+   listen       80;
+   server_name  localhost;
+
+   location ~* \/.*\/(.*.jar)$ {
+       alias /;
+       try_files $1 files/$1 =404;
+   }
+
+   location ~* \/.*\/.jar.md5 {
+       add_header Content-Type text/plain;
+       return 200 "MD5HASH_EXT";
+   }
+
+   location ~* \/.*\/.jar.sha1 {
+       add_header Content-Type text/plain;
+       return 200 "SHA1HASH_EXT";
+   }
+
+   location ~* \/.*\/-codestarts.jar.md5 {
+       add_header Content-Type text/plain;
+       return 200 "MD5HASH_CS";
+   }
+
+   location ~* \/.*\/-codestarts.jar.sha1 {
+       add_header Content-Type text/plain;
+       return 200 "SHA1HASH_CS";
+   }
+}

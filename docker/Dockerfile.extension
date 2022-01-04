@@ -1,0 +1,24 @@
+FROM adoptopenjdk/maven-openjdk11:latest as builder
+ARG extension_name="giraffi-base-extension"
+ARG extension_version="1.0.0"
+ARG registry_host="registry:8080"
+RUN mkdir /src
+COPY giraffi-base-extension src
+WORKDIR /src
+RUN mvn clean install -DskipTests
+
+FROM nginx:alpine as repo
+RUN apk add --update --no-cache unzip curl
+ARG extension_name="giraffi-base-extension"
+ARG extension_version="1.0.5"
+ARG registry_host="registry:8080"
+ARG token=token
+RUN mkdir /files
+COPY --from=builder /src/runtime/target/*.jar /files/
+RUN ls -lah /files
+COPY docker/nginx/templates/default.conf_tmpl /.
+RUN sed "s/MD5HASH_EXT/$(md5sum docker/nginx/files/${extension_name}-${extension_version}.jar | awk '{ print $1 }')/g" /default.conf_tmpl \
+    | sed "s/MD5HASH_CS/$(md5sum docker/nginx/files/${extension_name}-${extension_version}-codestarts.jar | awk '{ print $1 }')/g" \
+    | sed "s/SHA1HASH_EXT/$(sha1sum docker/nginx/files/${extension_name}-${extension_version}.jar | awk '{ print $1 }')/g" \
+    | sed "s/SHA1HASH_CS/$(sha1sum docker/nginx/files/${extension_name}-${extension_version}-codestarts.jar | awk '{ print $1 }')/g" > /etc/nginx/conf.d/default.conf
+RUN unzip -p $extension_name-$extension_version.jar META-INF/quarkus-extension.yaml | curl -X POST -H "Content-Type: application/yaml" -H "Token: ${token}" -d @- http://$registry_host/admin/v1/extension
