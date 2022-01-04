@@ -45,7 +45,7 @@ import picocli.CommandLine.Option;
         description = "catalog_publish made with jbang")
 class catalog_publish implements Callable<Integer> {
 
-    private static final String MAVEN_CENTRAL = "http://localhost:8081/repository/maven-snapshots/";
+    private static final String MAVEN_CENTRAL = "http://localhost:8083/repository/maven-releases/";
 
     private static final Logger log = Logger.getLogger(catalog_publish.class);
 
